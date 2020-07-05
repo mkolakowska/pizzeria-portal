@@ -1,23 +1,20 @@
 import React from 'react';
 import styles from './Dashboards.module.scss';
 import Tables from '../Tables/Tables';
-import Waiter from '../Waiter/Waiter';
+import Waiter from '../Waiter/WaiterContainer';
+import Grid from '@material-ui/core/Grid';
 
 const Dashboard = () => (
-  <div>
-    <div>
-      <Waiter />
-    </div>
-    <div className={styles.tables}>
-      <Tables />
-    </div>
-  </div>
+  <main className={styles.component}>
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <Waiter />
+      </Grid>
+      <Grid item xs={12}>
+        <Tables />
+      </Grid>
+    </Grid>
+  </main>
 );
-
-/*const Dashboard = () => (
-  <div className={styles.component}>
-    <h2>Dashboard view</h2>
-  </div>
-);*/
 
 export default Dashboard;

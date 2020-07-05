@@ -8,6 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Title from '../Title/Title';
 
 const demoContent = [
   { id: '1', order: 'pizza salami', status: 'done' },
@@ -17,6 +18,7 @@ const demoContent = [
 
 const Kitchen = () => (
   <Paper className={styles.component}>
+    <Title>Kitchen</Title>
     <Table>
       <TableHead>
         <TableRow>
@@ -43,10 +45,5 @@ const Kitchen = () => (
     </Table>
   </Paper>
 );
-/*const Kitchen = () => (
-  <div className={styles.component}>
-    <h2>Kitchen view</h2>
-  </div>
-);*/
 
 export default Kitchen;

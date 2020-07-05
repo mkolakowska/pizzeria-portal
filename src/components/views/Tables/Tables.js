@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Tables.module.scss';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Title from '../Title/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-//import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,19 +25,112 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const demoContent = [
+  {
+    hour: '13:00',
+    tables: [
+      { id: 1, status: 'booked' },
+      { id: 2, status: 'free' },
+      { id: 3, status: 'booked' },
+      { id: 4, status: 'free' },
+      { id: 5, status: 'booked' },
+      { id: 6, status: 'free' },
+    ],
+  },
+  {
+    hour: '13:30',
+    tables: [
+      { id: 1, status: 'booked' },
+      { id: 2, status: 'event' },
+      { id: 3, status: 'free' },
+      { id: 4, status: 'free' },
+      { id: 5, status: 'booked' },
+      { id: 6, status: 'free' },
+    ],
+  },
+  {
+    hour: '14:00',
+    tables: [
+      { id: 1, status: 'event' },
+      { id: 2, status: 'free' },
+      { id: 3, status: 'booked' },
+      { id: 4, status: 'free' },
+      { id: 5, status: 'booked' },
+      { id: 6, status: 'free' },
+    ],
+  },
+  {
+    hour: '14:30',
+    tables: [
+      { id: 1, status: 'booked' },
+      { id: 2, status: 'free' },
+      { id: 3, status: 'free' },
+      { id: 4, status: 'event' },
+      { id: 5, status: 'booked' },
+      { id: 6, status: 'free' },
+    ],
+  },
+];
+
+const renderActions = (status) => {
+  switch (status) {
+    case 'free':
+      return (
+        <>
+          <Button
+            size="small"
+            component={Link}
+            variant="contained"
+            color="secondary"
+            to={`${process.env.PUBLIC_URL}/tables/booking/new`}
+          >
+            New Booking
+          </Button>
+          <Button
+            size="small"
+            component={Link}
+            variant="contained"
+            color="secondary"
+            to={`${process.env.PUBLIC_URL}/tables/events/new`}
+          >
+            New Event
+          </Button>
+        </>
+      );
+    case 'booked':
+      return (
+        <Button
+          size="small"
+          component={Link}
+          variant="contained"
+          color="primary"
+          to={`${process.env.PUBLIC_URL}/tables/booking/123abc`}
+        >
+          Booked
+        </Button>
+      );
+    case 'event':
+      return (
+        <Button
+          size="small"
+          component={Link}
+          variant="contained"
+          color="primary"
+          to={`${process.env.PUBLIC_URL}/tables/events/123abc`}
+        >
+          Event
+        </Button>
+      );
+    default:
+      return null;
+  }
+};
+
 const Tables = () => {
   const classes = useStyles();
-  const Hours = [];
-  const halfHour = ['00', '30'];
-  for (let i = 12; i < 24; i++) {
-    for (let j = 0; j < 2; j++) {
-      Hours.push(('0' + i).slice(-2) + ':' + halfHour[j]);
-    }
-  }
-
   let today = new Date();
   let currentDate = today.toISOString().slice(0, 10);
-  const [selectedDate, setSelectedDate] = React.useState(currentDate);
+  const [selectedDate, setSelectedDate] = useState(currentDate);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -51,7 +144,7 @@ const Tables = () => {
         to={`${process.env.PUBLIC_URL}/tables/booking/new`}
         activeclassname="active"
       >
-        Tables booking
+        New booking
       </Button>
       <Button
         className={styles.button}
@@ -59,27 +152,42 @@ const Tables = () => {
         to={`${process.env.PUBLIC_URL}/tables/events/new`}
         activeclassname="active"
       >
-        Tables event
+        New event
       </Button>
-
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <TextField
+            id="date"
+            label="Date"
+            type="date"
+            defaultValue={selectedDate}
+            onChange={handleDateChange}
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            id="time"
+            label="Hour"
+            type="time"
+            defaultValue="12:30"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 1800, // 30 min
+            }}
+          />
+        </Grid>
+      </Grid>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <form className={classes.container} noValidate>
-                <TextField
-                  id="date"
-                  label="Date & Time"
-                  type="date"
-                  defaultValue={selectedDate}
-                  onChange={handleDateChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </form>
-            </TableCell>
+            <TableCell></TableCell>
             <TableCell>Table 1</TableCell>
             <TableCell>Table 2</TableCell>
             <TableCell>Table 3</TableCell>
@@ -89,9 +197,16 @@ const Tables = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Hours.map((row) => (
-            <TableRow hover key={row}>
-              <TableCell>{row}</TableCell>
+          {demoContent.map((row) => (
+            <TableRow key={row.hour}>
+              <TableCell component="th" scope="row" className={styles.hour}>
+                {row.hour}
+              </TableCell>
+              {row.tables.map((table) => (
+                <TableCell key={table.id}>
+                  {renderActions(table.status)}
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>
@@ -99,26 +214,5 @@ const Tables = () => {
     </Paper>
   );
 };
-/*const Tables = () => (
-  <div className={styles.component}>
-    <Button
-      className={styles.button}
-      component={Link}
-      to={`${process.env.PUBLIC_URL}/tables/booking/new`}
-      activeclassname="active"
-    >
-      Tables booking
-    </Button>
-    <Button
-      className={styles.button}
-      component={Link}
-      to={`${process.env.PUBLIC_URL}/tables/events/new`}
-      activeclassname="active"
-    >
-      Tables event
-    </Button>
-    <h2>Tables view</h2>
-  </div>
-);*/
 
 export default Tables;

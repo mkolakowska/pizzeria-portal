@@ -1,12 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './TablesEvent.module.scss';
-import { Link } from 'react-router-dom';
 
-const TablesEvent = () => (
+const TablesEvent = ({ match }) => (
   <div className={styles.component}>
-    <h2>Tables event view</h2>
-    <Link to={`${process.env.PUBLIC_URL}/tables/events/:id`}>Id</Link>
+    <h2>Event view</h2>
+    <span>{match.params.id}</span>
   </div>
 );
+
+TablesEvent.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
+  }),
+};
 
 export default TablesEvent;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './WaiterOrder.module.scss';
+import styles from './NewWaiterOrder.module.scss';
 //import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -25,7 +25,7 @@ const menu = [
   },
 ];
 
-const WaiterOrder = () => {
+const NewWaiterOrder = () => {
   const [values, setValues] = useState({
     table: '',
     order: [],
@@ -40,7 +40,7 @@ const WaiterOrder = () => {
 
   return (
     <Paper className={styles.component}>
-      <Title>Order 123</Title>
+      <Title>New Order</Title>
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <TextField
@@ -95,4 +95,4 @@ const WaiterOrder = () => {
   </div>
 );*/
 
-export default WaiterOrder;
+export default NewWaiterOrder;

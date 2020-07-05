@@ -1,12 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './TablesBooking.module.scss';
-import { Link } from 'react-router-dom';
 
-const TablesBooking = () => (
+const TablesBooking = ({ match }) => (
   <div className={styles.component}>
-    <h2>Tables booking view</h2>
-    <Link to={`${process.env.PUBLIC_URL}/tables/booking/:id`}>Id</Link>
+    <h2>Booking view</h2>
+    <span>{match.params.id}</span>
   </div>
 );
+
+TablesBooking.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
+  }),
+};
 
 export default TablesBooking;
